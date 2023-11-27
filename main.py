@@ -1,17 +1,23 @@
 from flask import Flask, request
+import logging
+import json
 
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
-@app.route('/alice', methods = ['POST'])
-def resp():
-    text = request.json.get('request', {}).get('command')
-    response_text = f'Вы сказали {text}'
+@app.route("/",methods=["POST"])
+def main():
+    logging.info(request.join)
+
     response = {
-        'response': {
-            'text': response_text,
-            'end_session': False,
-            'suggests': ['йоу']
-        },
-        'version': '1.0'
+        "version":request.json["version"],
+        "session":request.json["session"],
+        "response": {
+            "end_session": False
+        }
     }
-    return response
+
+    req = request.join
+    if req["session"]["new"]:
+        response["response"]["text"] = "Привет! Я капибара"
+    return json.dumps(response)
